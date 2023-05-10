@@ -2,6 +2,10 @@ import sys
 import time
 
 def compress_lzw(file_name, k):
+    isVideo = False
+    if file_name.endswith(".mp4"):
+        isVideo = True
+
     with open(file_name, 'r', encoding='iso-8859-1') as f:
         data = f.read()
 
@@ -27,28 +31,46 @@ def compress_lzw(file_name, k):
         output.append(dictionary[current_string[:-1]].to_bytes(2, byteorder='big'))
         output.append(dictionary[current_string[-1]].to_bytes(2, byteorder='big'))
 
-    with open(f'./Output/compress/compressed{k}' + '.lzw', 'wb') as f:
-        for item in output:
-            if len(item) == 2:
-                f.write(item)
-            elif len(item) == 3:
-                MAX_INT_SIZE = 65535 # Tamanho máximo permitido para um valor inteiro de 2 bytes
-                if int.from_bytes(item, byteorder='big') <= MAX_INT_SIZE:
-                    f.write(item[:2])
-                else:
-                    parts = []
-                    value = int.from_bytes(item, byteorder='big')
-                    while value > 0:
-                        part = value % MAX_INT_SIZE
-                        parts.append(part.to_bytes(2, byteorder='big'))
-                        value = (value - part) // MAX_INT_SIZE
-                    f.write(reversed(parts))
+    if isVideo:    
+        with open(f'./Output/compress/compressedVideo{k}' + '.lzw', 'wb') as f:
+            for item in output:
+                if len(item) == 2:
+                    f.write(item)
+                elif len(item) == 3:
+                    MAX_INT_SIZE = 65535 # Tamanho máximo permitido para um valor inteiro de 2 bytes
+                    if int.from_bytes(item, byteorder='big') <= MAX_INT_SIZE:
+                        f.write(item[:2])
+                    else:
+                        parts = []
+                        value = int.from_bytes(item, byteorder='big')
+                        while value > 0:
+                            part = value % MAX_INT_SIZE
+                            parts.append(part.to_bytes(2, byteorder='big'))
+                            value = (value - part) // MAX_INT_SIZE
+                        f.write(reversed(parts))
+    else:
+        with open(f'./Output/compress/compressed{k}' + '.lzw', 'wb') as f:
+            for item in output:
+                if len(item) == 2:
+                    f.write(item)
+                elif len(item) == 3:
+                    MAX_INT_SIZE = 65535 # Tamanho máximo permitido para um valor inteiro de 2 bytes
+                    if int.from_bytes(item, byteorder='big') <= MAX_INT_SIZE:
+                        f.write(item[:2])
+                    else:
+                        parts = []
+                        value = int.from_bytes(item, byteorder='big')
+                        while value > 0:
+                            part = value % MAX_INT_SIZE
+                            parts.append(part.to_bytes(2, byteorder='big'))
+                            value = (value - part) // MAX_INT_SIZE
+                        f.write(reversed(parts))
 
     print(f"Arquivo comprimido salvo na pasta Output.")
 
 if __name__ == "__main__":
-    # file_name = sys.argv[1]
-    file_name = './Input/corpus16MB.txt'
+    file_name = sys.argv[1]
+    # file_name = './Input/corpus16MB.txt'
     for k in range(9, 17):
         start_time = time.time()  # marca o tempo inicial
         compress_lzw(file_name, k)

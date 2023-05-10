@@ -2,6 +2,10 @@ import time
 import sys
 
 def decompress_lzw(input_file, k):
+    isVideo = False
+    if  "Video" in input_file:
+        isVideo = True
+
     # Inicializa o dicionário com os caracteres ASCII
     dictionary = {i: chr(i) for i in range(256)}
     dict_size = 256
@@ -43,14 +47,18 @@ def decompress_lzw(input_file, k):
 
     # Escreve a sequência de caracteres descomprimidos em um arquivo de saída
     output_file = input_file.split(".")[0] + "_decompressed.txt"
-    with open(f'./Output/decompress/decompress{k}', "w", encoding='utf-8') as f:
-        f.write("".join(output))
+    if isVideo:        
+        with open(f'./Output/decompress/decompress{k}.mp4', "w", encoding='utf-8') as f:
+            f.write("".join(output))
+    else:
+        with open(f'./Output/decompress/decompressVideo{k}.txt', "w", encoding='utf-8') as f:
+            f.write("".join(output))
 
 if __name__ == "__main__":
     file_name = sys.argv[1]
-    for k in range(9, 17):
-        start_time = time.time()  # marca o tempo inicial
-        decompress_lzw(file_name, k)
-        end_time = time.time()  # marca o tempo final
-        elapsed_time = end_time - start_time  # calcula o tempo decorrido
-        print(f"Iteração {k}: {elapsed_time:.6f} segundos")
+    k = sys.argv[2]
+    start_time = time.time()  # marca o tempo inicial
+    decompress_lzw(file_name, int(k))
+    end_time = time.time()  # marca o tempo final
+    elapsed_time = end_time - start_time  # calcula o tempo decorrido
+    print(f"Iteração {k}: {elapsed_time:.6f} segundos")
