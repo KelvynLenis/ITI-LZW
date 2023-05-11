@@ -48,10 +48,10 @@ def decompress_lzw(input_file, k):
     # Escreve a sequência de caracteres descomprimidos em um arquivo de saída
     output_file = input_file.split(".")[0] + "_decompressed.txt"
     if isVideo:        
-        with open(f'./Output/decompress/decompress{k}.mp4', "w", encoding='utf-8') as f:
+        with open(f'./Output/decompress/decompressVideo{k}.mp4', "w", encoding='utf-8') as f:
             f.write("".join(output))
     else:
-        with open(f'./Output/decompress/decompressVideo{k}.txt', "w", encoding='utf-8') as f:
+        with open(f'./Output/decompress/decompress{k}.txt', "w", encoding='utf-8') as f:
             f.write("".join(output))
 
 if __name__ == "__main__":

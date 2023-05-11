@@ -63,10 +63,10 @@ def compress_lzw(file_name, k):
                         while value > 0:
                             part = value % MAX_INT_SIZE
                             parts.append(part.to_bytes(2, byteorder='big'))
-                            value = (value - part) // MAX_INT_SIZE
+                            value = (value - part) // MAX_INT_SIZE # Atualizando o valor de value para ser a parte inteira da divisão
                         f.write(reversed(parts))
 
-    print(f"Arquivo comprimido salvo na pasta Output.")
+    print(f"Tamanho do dicionario: {dict_size}")
 
 if __name__ == "__main__":
     file_name = sys.argv[1]
